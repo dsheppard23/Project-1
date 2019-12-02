@@ -1,0 +1,275 @@
+﻿//-----------------------------------------------------------
+// CS 215-003 – Project 1, Section 3 and project 1
+//-----------------------------------------------------------
+// Author: Dillon Sheppard
+// Date: 03/08/1999
+// Description: Cafe vendor
+// Assistance: I received help from no one.
+
+
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <Windows.h>
+using namespace std;
+
+
+//constants
+const double coffeePrice = 0.15;
+const double lattePrice = 0.25;
+const double mochaPrice = 0.30;
+const double taxRate = 0.06;
+
+
+int main() {
+        //display logo
+        cout << "+-----------------------------+" << endl;
+        cout << "|         Cafe' Vendor        |" << endl;
+        cout << "|     By: Dillon Sheppard     |" << endl;
+        cout << "+-----------------------------+" << endl;
+
+
+        //declare variables
+        int coffeeTank = 0;
+        int latteTank = 0;
+        int mochaTank = 0;
+        double totalPrice = 0.00;
+        string choice = "";
+        int size = 0; //size of order in ounces
+        double cashGiven = 0;
+        double change = 0;
+        double choicePerOz = 0; //choice's price per OZ
+        double subTotal = 0;
+        double totalTax = 0; // used for the receipt 
+        int coffeeOZSold = 0;
+        int latteOZSold = 0;
+        int mochaOZSold = 0;
+        double coffeeTotSold = 0.00;
+        double latteTotSold = 0.00;
+        double mochaTotSold = 0.00;
+
+
+        //startup get tank level input
+        cout << "STARTUP: Enter tank levels" << endl;
+        cout << "Coffee Tank: ";
+        cin >> coffeeTank;
+        cout << "Latte Tank:  ";
+        cin >> latteTank ;
+        cout << "Mocha Tank:  ";
+        cin >> mochaTank;
+        cout << endl << endl;
+        
+
+
+        //while loop 
+        while (choice != "!")
+        {
+                cout << "PLEASE SELECT YOUR BEVERAGE!" << endl;
+                if (coffeeTank >= 18) 
+                {
+                        cout << left << setw(10) << "C. Coffee" << setw(2) << "" << "$ 0.15 per oz." << endl;
+                }
+                if (latteTank >= 18) 
+                {
+                        cout << left << setw(10) << "L. Latte" << setw(2) << "" << "$ 0.25 per oz." << endl;
+                }
+                if (mochaTank >= 18) 
+                {
+                        cout << left << setw(10) << "M. Mocha" << setw(2) << "" << "$ 0.30 per oz." << endl;
+                }
+
+
+                //loop for choice
+                bool i = false;
+                while (i == false)
+                {
+                        // get choice
+                        cout << "===> ";
+                        cin >> choice;
+                        choice = choice.substr(0, 1);
+
+
+                        //nested if and else to verify input and shutdown
+                        if (choice == "C" || choice == "c" || choice == "L" || choice == "l" || choice == "M" || choice == "m" || choice == "!")
+                        {
+                                i = true;
+                                if (choice == "!")
+                                {
+                                        cout << endl << "SHUTDOWN: Totals Sold:" << endl;
+                                        cout << "BEVERAGE   OUNCES   TOTAL SOLD   LEFT IN TANK" << endl;
+                                        cout << "--------   ------   ----------   ------------" << endl;
+                                        cout << left << setw(9) << "Coffee" << "  " << right << setw(6) << coffeeOZSold << "   $" << right << setw(9) << coffeeTotSold << setw(15) << coffeeTank << endl;
+                                        cout << left << setw(9) << "Latte" << "  " << right << setw(6) << latteOZSold <<"   $" << right << setw(9) << latteTotSold << setw(15) << latteTank << endl;
+                                        cout << left << setw(9) << "Mocha" << "  " << right << setw(6) << mochaOZSold <<"   $" << right << setw(9) << mochaTotSold << setw(15) << mochaTank << endl;
+                                        cout << endl;
+                                }
+                                //validate the tank is full
+                                if ((choice == "C" || choice == "c") && coffeeTank < 18)
+                                {
+                                        cout << "Invalid selection! Try again!" << endl;
+                                        i = false;
+                                }
+                                if ((choice == "L" || choice == "l") && latteTank < 18)
+                                {
+                                        cout << "Invalid selection! Try again!" << endl;
+                                        i = false;
+                                }
+                                if ((choice == "M" || choice == "m") && mochaTank < 18)
+                                {
+                                        cout << "Invalid selection! Try again!" << endl;
+                                        i = false;
+                                }
+                        }
+                        else
+                        {
+                                cout << "Invalid selection! Try again!" << endl;
+                        }
+                }
+
+
+                // if else statement to verify choice isnt shutdown code
+                if (choice != "!")
+                {
+                        bool x = false;
+                        while (x == false)
+                        {
+                                cout << "Number of ounces <9-18>: ";
+                                cin >> size;
+                                if (size >= 9 && size <= 18)
+                                {
+                                        x = true;
+                                }
+                                else
+                                {
+                                        cout << "Invalid entry!" << endl;
+                                }
+                        }
+
+
+                        //manipulate choice, subtract tank values and Prices
+                        if (choice == "C" || choice == "c")
+                        {
+                                choice = "Coffee";
+                                coffeeTank = coffeeTank - size;
+                                subTotal = coffeePrice * size;
+                                totalTax = taxRate * subTotal;
+                                totalPrice = subTotal + (taxRate * subTotal);
+                                choicePerOz = coffeePrice;
+                                coffeeOZSold = coffeeOZSold + size;
+                                coffeeTotSold = coffeeTotSold + totalPrice;
+                        }
+                        if (choice == "L" || choice == "l")
+                        {
+                                choice = "Latte";
+                                latteTank = latteTank - size;
+                                subTotal = lattePrice * size;
+                                totalTax = taxRate * subTotal;
+                                totalPrice = subTotal + (taxRate * subTotal);
+                                
+                                choicePerOz = lattePrice;
+                                latteOZSold = latteOZSold + size;
+                                latteTotSold = latteTotSold + totalPrice;
+                        }
+                        if (choice == "M" || choice == "m")
+                        {
+                                choice = "Mocha";
+                                mochaTank = mochaTank - size;
+                                subTotal = mochaPrice * size;
+                                totalTax = taxRate * subTotal;
+                                totalPrice = subTotal + (taxRate * subTotal);
+                                choicePerOz = mochaPrice;
+                                mochaOZSold = mochaOZSold + size;
+                                mochaTotSold = mochaTotSold + totalPrice;
+                        }
+
+
+                        //display Total Price
+                        cout << left << setw(12) << "Total Price:" << setw(9) << "" << "$ " << fixed << setprecision(2) << totalPrice << endl;
+
+
+                        
+                        //Collect cash and give change if needed
+                        //loop for change if needed
+                        bool q = false;
+                        while (q == false)
+                        {
+                                cout << left << setw(20) << "Enter amount paid:" << setw(1) << "" << "$ ";
+                                cin >> cashGiven;
+                                
+                                change = cashGiven - totalPrice;
+                                totalPrice = round(totalPrice * 100) / 100;
+                                change = abs(change);
+                                //if statements to give out change 
+                                if (cashGiven >= totalPrice){
+                                        cout << fixed << setprecision(2) << "Your change $ " << change << " falls out of the machine onto the floor" << endl;
+                                        cout << "Thank you! Your " << choice << " falls out of the machine on the floor" << endl << endl;
+                                        q = true;
+                                }
+                                        else
+                                {
+                                        cout << "That is not enough! Try again!" << endl;
+                                }
+                        }
+
+
+                        //simulate brewing and sleep function
+                        Sleep(2000);
+                        cout << "A cup drops out of the machine below the " << choice << " spigot." << endl;
+
+
+                        //loop to simulate brew, also declare variables
+                        double brewRemainder = size / 3; //find out if divisible by 3
+                        brewRemainder = floor(brewRemainder); 
+                        int brewModulo = size % 3;
+                        int brewSize = brewRemainder * 3;
+
+
+                        for (int brew = 1; brew <= brewRemainder; ++brew)
+                        {
+                                Sleep(2000);
+                                cout << setw(2) << brew * 3 << " ounces dispensed..." << endl;
+                        }
+                        
+                        //if not divisible by 3 add that modulo
+                        if (brewModulo > 0)
+                        {
+                                Sleep(2000);
+                                cout <<  setw(2) << brewSize + brewModulo << " ounces dispensed..." << endl;
+                                Sleep(2000);
+                        }
+
+
+                        cout << endl;
+
+
+                        //print reciept
+                        cout << "Your " << choice << " is ready! Here is your receipt!" << endl;
+                        cout << left << setw(14) << "Beverage:" << setw(3) <<"" << choice << endl;
+                        cout << left << setw(14) << "Ounces:" << setw(3) <<"" << left << setw(10) << size << endl;
+                        cout << left << setw(14) << "Price per Oz: " << left << setw(3) << "$"<< choicePerOz << endl;
+                        cout << left << setw(14) << "Sub Total: " << left << setw(3) <<"$" << subTotal << endl;
+                        cout << left << setw(14) << "Tax: " << left << setw(3) << "$" << totalTax << endl;
+                        cout << left << setw(14) << "Total: " << left << setw(3) << "$" << totalPrice << endl;
+                        cout << left << setw(14) <<"Amount Paid: " << left << setw(3) << "$" << cashGiven << endl;
+                        cout << left << setw(14) <<"Change: " << left << setw(3) << "$" << change << endl;
+        
+                }
+
+
+                cout << endl;
+
+
+                system("pause");
+
+
+        } while (choice != "!");
+
+
+
+
+
+
+        
+
+
+}
